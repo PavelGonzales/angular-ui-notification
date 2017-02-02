@@ -12,6 +12,7 @@ angular.module('ui-notification').provider('Notification', function() {
         positionY: 'top',
         replaceMessage: false,
         templateUrl: 'angular-ui-notification.html',
+        template: false,
         onClose: undefined,
         closeOnClick: true,
         maxCount: 0, // 0 - Infinite
@@ -44,7 +45,8 @@ angular.module('ui-notification').provider('Notification', function() {
             }
 
             args.scope = args.scope ? args.scope : $rootScope;
-            args.template = args.templateUrl ? args.templateUrl : options.templateUrl;
+            args.templateUrl = args.templateUrl ? args.templateUrl : options.templateUrl;
+            args.template = args.template || options.template || false;
             args.delay = !angular.isUndefined(args.delay) ? args.delay : delay;
             args.type = t || args.type || options.type ||  '';
             args.positionY = args.positionY ? args.positionY : options.positionY;
@@ -55,17 +57,18 @@ angular.module('ui-notification').provider('Notification', function() {
             args.container = args.container ? args.container : options.container;
             args.priority = args.priority ? args.priority : options.priority;
             
-            var template=$templateCache.get(args.template);
-
-            if(template){
+            
+            var template = args.template || $templateCache.get(args.templateUrl); 
+ 
+            if(template) {
                 processNotificationTemplate(template);
             }else{
                 // load it via $http only if it isn't default template and template isn't exist in template cache
                 // cache:true means cache it for later access.
-                $http.get(args.template,{cache: true})
+                $http.get(args.templateUrl,{cache: true})
                   .then(processNotificationTemplate)
                   .catch(function(data){
-                    throw new Error('Template ('+args.template+') could not be loaded. ' + data);
+                    throw new Error('Template ('+args.templateUrl+') could not be loaded. ' + data);
                   });                
             }    
             
