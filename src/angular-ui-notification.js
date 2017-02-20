@@ -25,7 +25,7 @@ angular.module('ui-notification').provider('Notification', function() {
         this.options = angular.extend({}, this.options, options);
     };
 
-    this.$get = function($timeout, $http, $compile, $templateCache, $rootScope, $injector, $sce, $q, $window) {
+    this.$get = ['$timeout', '$http', '$compile', '$templateCache', '$rootScope', '$injector', '$sce', '$q', '$window', function($timeout, $http, $compile, $templateCache, $rootScope, $injector, $sce, $q, $window) {
         var options = this.options;
 
         var startTop = options.startTop;
@@ -180,7 +180,7 @@ angular.module('ui-notification').provider('Notification', function() {
                 messageElements.push(templateElement);
 
                 if(args.positionX == 'center'){
-                    var elWidth = parseInt(templateElement[0].offsetWidth);
+                    var $timeout, $http, $compile, $templateCache, $rootScope, $injector, $sce, $q, $windowelWidth = parseInt(templateElement[0].offsetWidth);
                     templateElement.css('left', parseInt(window.innerWidth / 2 - elWidth / 2) + 'px');
                 }
 
@@ -250,5 +250,5 @@ angular.module('ui-notification').provider('Notification', function() {
         };
 
         return notify;
-    };
+    }];
 });
